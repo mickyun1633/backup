@@ -1,0 +1,313 @@
+day24(dbms 6일차)
+서브쿼리 -> view -> TCL -> DCL -> JDBC
++) 2월 첫쨰주
+	- 팀과제 화요일(02.03) ~ 목요일(02.05)
+	- 개인 클론코딩 목요일(02.05) ~ 다음주 수요일(02.11)
+
+1. 서브쿼리(Subquery)
+	하나의 query 내에 작성하는 또 다른 query
+	subquery의 위치에 따라 종류를 구분한다
+	subquery는 main query의 column을 사용할 수 있지만main query는 subquery의 column 사용 불가
+
+	- FROM 절 : IN LINE VIEW
+	- SELECT 절 : SEALAR	
+	- WHERE 절 : SUB QUERY		
+
+1) 인라인 뷰(INLINE VIEW)
+	FROM 절 안에 또 다른 query를 작성한다
+	subquery의 결과를 가상 table처럼 사용한다
+
+2) 스칼라 서브쿼리(Scalar Subquery)
+	SELECT 절 안에 또 다른 query를 작성한다
+	단일 column, 단일 행을 반복한다(1개의 값으로 사용)
+
+3) 서브쿼리(Subquery)
+	WHERW절 또는 HAVING 절 안에 또 다른 query를 작성한다
+
+연관 서브궈리 : subquery가 main query column을 가지고 있는 경우(main query 참조)
+비연관 서브쿼리 : subquery가 main query column을 가지고 있지 않은 경우(독립 실행)
+
+단일행 subquery : 결과가 1개일 떄
+	사용 연산자 : =, >, <, >=, <=, <>
+
+7) 다중행 subquery : 
+	사용 연산자 : IN, ALL ANY, EXISTS
+
+	SELECT column
+	FROM table
+	WHERE column명 = (SELECT column 
+
++) EXISTS
+	SELECT *
+	FROM table A
+	WHERE EXISTS (SELECT 1 FROM table B WHERE 조건);
+
++) ALL : 전부
+   ANY : 하나라도
+   EXISTS : 있냐 없냐
+   IN : 포함하냐 아니냐
+
+2. VIEW
+	기본의 table은 그대로 놔둔 채 필요한 column들 및 새로운 column을 만든 가상 table
+	실제 data가 저장되는 것은 아니지만 VIEW를 통해서 data를 관리할 수 있다
+
+1) VIEW 사용하는 이유
+	- 보안성 : 가존의 query문이 보이지 않고, 권한알 가진 사람들만 접근할 수 있도록 따로 제한할 수 있다
+	- 독립성 : 다른 곳에서 원본 table에 접근하지 못하도록 하는 성질
+	- 편리성 : 긴 query문을 짧게 만드는 성질
+
+2) VIEW 문법
+	- VIEW 생성
+	CREATE VIEW 뷰이름 AS 쿼리문;
+
+	- VIEW 사용
+	SELECT * FROM 뷰이름;
+
+	- VIEW 삭제
+	DROP VIEW 뷰이름;
+
+3. DCL : data 제어어
+	dataBase에 접근하는 권한일 제어하는 command
+	
+	GRANT	계정에 권한을 부여하는 명령어
+		GRANT 권한 [ON table명] TO 계정명;
+
+	REVOKE	계정에 권환을 회수하는 명령어
+		REVOKE 권한 [ON table명] FROM 계정명;
+
+- 계정 만들기
+	SYS AS SYSDBA 접속 계정 생성 가능
+	CREATE USER 계정명 identified by 비밍번호;
+
+- 권한 부여하기
+	grant create session to 계정명;
+	grant create table, create view, resource to 계정명;
+
+	create session		dateBase에 로그인 할 수 있는 권한
+	create table		table 생성 가능한 권한
+	create view		view 생성 가능한 권한
+	resource		여러 객체(시퀀스, 프로시저 등) 생성 가능한 권한
+
+- 현재 로그인한 계정의 권한 확인하기
+	SELECT * FROM user_tab_privs_recd;
+
+- 권한 회수하기
+	REVOKE 권한 [ON table명] FROM 계정명;
+
+- 계정 삭제
+	DROP USER 계정명;
+
+4. TCL : 트렌잭션 제어어
+1) 트랜잭션(Transaction)
+	dataBase에서 하나의 논리적 작업 단위
+	하나의 작업 묶음 세트
+	여러개의 SQL을 한번에 성공하거나 전부 취소하는 단위
+
+update account set money = money - 10000 where name = '영선';
+update account set money = money + 10000 where name = '해준';
+
+2) commit과 rollback 관계
+	commit		확정(저장)
+	rollback	취소(되돌림)
+
+3) 트랜젝션의 4대 특징 ★★★
+	ACID
+	Atomicity 원자성 : 전부 성공 또는 전부 실패
+	Consistency 일관성 : data 규칙 유지
+	Isolation 고립성 : 동시에 해도 간섭 X
+	Durability 영속성 : COMMIT 하면 날라가지 않음
+
+5. 소프트웨어 아키텍처 디자인 패턴
+	소프트웨어 시스템을 효율적이고 견고하게 설계하기 위한 구조적인 툴
+	소프트웨어를 구성하는 고수준 구조(High-level-Structure)
+	모듈 간 역활과 관계, 데이터 흐름을 정의
+	확장성, 재사용성, 유지보수성 향상
+
+1) 계층형 구조(Layered Pattern)
+	위에서 아래로 층층이 쌓은 구조
+	[화면 (UI)]
+	    ↓
+	[비즈니스로직]
+	    ↓
+	[데이터 베이스]
+
+	각 층이 역활이 정해져있음
+	위에서 아래로만 요청
+
+- 장점 : 역활 분리 쉬움, 테스트하기 좋음, 구조 이해 쉬움
+- 단점 : 단계가 많아지면 느려질 수 있음
+
+2) 클라이언트-서버 패턴(Client-Server Pattern)
+	요청하는 쪽 + 처리하는 쪽 구조
+	[클라이언트] -> 요청 -> [서버]
+	[클라이언트] <- 응답 <- [서버]
+
+- 장점 : 구조 단순, 인터넷 서비스에 필수
+- 단점 : 서버 터지면 다 멈춤, 서버에 부하 집중
+
+3) 이벤트 기반 구조(Event-Driven Pattern)
+	이벤트 발생 -> 관련 모듈 실행
+	비동기 방식
+	자동 반응
+
+- 장점 : 유연함, 연결 느슨함
+- 단점 : 흐름 파악이 어려움, 디버깅 힘듦
+
+4) 마이크로 서비스(Microservices Pattern)
+	큰 시스템을 작은 서비스로 쪼갠 구조
+
+	ex)
+	회원서비스
+	주문서비스
+	결제서비스
+	배송서비스
+
+	서비스마다 독립적
+	DB도 따로 가짐
+
+- 장점 : 독립 배포 가능, 일부만 고쳐도 됨, 장애 격리
+- 단점 : 구조 복잡, 관리 어려움
+
+--------------- 사용예정 ----------------
+
+5) MVC Pattern
+	화면 + 처리 + data 분리
+	Model <-> Controller <-> View
+
+- 장점 : 역활 분리 깔끔, 유지보수 좋음
+- 단점 : 작은 서비스에서는 과함
+
+--------------- 사용예정 ----------------
+6) MVVM Pattern
+	MVC + 자동 연결 강화 버전
+	View <-> ViewModel <-> Model
+
+- 장점 : UI 코드 깔끔, 자동 동기화
+- 단점 : 처음 배우기 어려움
+
+7) Pipe and Filter Pattern
+	공장 라인처럼 단계벌 처리
+	입력 -> 필터1 -> 필터2 -> 필터3 -> 출력
+
+	각 단계가 독립
+
+- 장점 : 재사용 쉬움, 구조 깔끔
+- 단점 : 실시간 처리 느림
+
+6. MVC
+	M(Model)
+	V(View)
+	C(Controller)
+
+1) Pattern
+	패턴 : 반복되는 형태/모양
+	- 자주 나오는 문제를 사람들이 검증한 방식으로 반복해서 해결하다보니
+	  이럴 때 이렇게 코드 구현하는 것이 좋더라 하는 것들을 약속처럼 굳어진 것이 설계 패턴
+	=> 남들이 정해놓은 잘 되는 구조를 따라 쓰는 구조
+
+2) MVC ★★외우기★★
+	Java에 MVC 문법/기능이 있는 것은 아니다
+	MVC는 framework 기능이 아닌 설계 방식
+
+	M = Model : data/비즈니스로직(핵심처리)
+		table에서 조회된 결과값을 담기 위한 변수들이 선언된 class
+		class명 뒤에 DTO, VO라는 문자열을 붙여준다
+		VO(Value Object) : table을 보고 그대로 만든 객체
+		DTO(Data Transfer Object) : 화면에 결과를 한번에 묶어서 전달할 객체
+
+	V = View : 화면(UI), 사용자에게 보여지는 부분
+		사용자에게 보여질 화면을 구성하는 부분
+		선언된 CRUD method를 사용하는 부분
+
+	C = Controller : 요청을 받아서 Model과 View 연결/제어
+		JSP에서 더 자세히 알아볼예정
+		DAO(Data Access Object) : table에 접근할 수 있는 method들이 선언된 class
+
+
+3) Java + DB 설계 관점
+(1) DB 중심 설계(예전방식, JPA 이전)
+	DB에서 table을 먼저 만들어놓고 그 table에 맞춰서 Java class를 만드는 방식
+	DB가 기준이고 Java가 따라감
+	
+	- DB구조가 바뀌면 Java 코드가 크게 흔들림
+
+(2) Java 중심 설계(요즘방식, JPA)
+	Java에서 객체(class)를 먼저 설계하고
+	그 설계를 기반으로 table이 만들어지거나 매핑되는 방식
+	+) JPA (Java Persistence API) : Java 객체와 DB table을 자동으로, 체계적으로 연결해주는 표준 기술
+		설계가 더 깔끔해지고 유지보수성도 좋아지고 MVC같은 구조도 자연스럽게 연결됨
+
+7. JDBC(Java Database Connectivity)
+	Java에서 DB(oracle, MySQL 등)에 접속해서
+	조회(SELECT), 삽입(INSERT), 수정(UPDATE), 삭제(DELETE)를 할 수 있게 해주는 Java 표준 API
+	
+1) JDBC 전체 흐름
+	Driver loding
+		DB 회사마다 통신방식이 달라서 그걸 번역해주는 driver loding한다
+		Class.forName("드라이브클래스");
+
+	Connection 열기
+		DB와 연결된 통로
+		연결 성공 : dbms와 정상연결
+		연결 실패 : 주소/계정/비밀번호/포트 등 문제 가능
+
+	PreparedStatement 생성 ★★★보안쪽에서도 아주 중요함★★★ 
+		query(SQL)를 관리해주는 객체
+		SQL문을 준비해두고 값을 안전하게 넣어서 실행할 수 있다
+
+	.executeQuery() / .executeUpdate()
+		executeQuERY() : SELECT 전용 => 결과가 table이다 ResultSet으로 받음
+		executUpdate() : INSERT, UPDATE, DELETE 전용	=> int 영향받은 행 수
+					1이면 1행 성공, 0이면 실패
+
+	ResultSet 받기(SELECT 일 때만)
+		SELECT 결과(table)를 한 줄 씩 읽는 커서(cursor)
+		next()를 해야 다음 행(레코드)로 이동하면서 읽을 수 있음
+
+	.close()
+		DB 연결 객체들은 무조건 닫아야함
+		역순으로 닫는다
+		rs.close()
+		ps.close()
+		conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

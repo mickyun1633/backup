@@ -1,0 +1,27 @@
+<!-- 12번 : DOM을 활용한 이벤트 처리 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM을 활용한 이벤트 처리</title>
+  <link rel="stylesheet" href="./../css/event02.css">
+  <script defer src="./../js/event02.js"></script>
+</head>
+<body>
+  <main>
+    <div class="box" id="click"></div>
+    <div class="box" id="over"></div>
+    <div class="box" id="out"></div>
+    <div class="box" id="over-out"></div>
+    <div class="box" id="click2"></div>
+  </main>
+</body>
+</html>
+<!-- <script></script>가 head안에 있음
+  browse 위에서 아래로 읽는다
+  1) head 파싱
+  2) script 실행
+  3) 아직 body안의 <div id="click">는 안만들어진 상태
+  4) querySelector("#click"); => null로 뜨게 됨
+  -->

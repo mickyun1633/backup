@@ -1,0 +1,210 @@
+day25(dbms 7일차)
+jdbc
+
+1. 학생 관리 프로그램
+1) 프로젝트 구조
+src
+|- com.koreait
+   	|- Main.java				// 시작만
+   	|- controller 		
+   	|   	|- AttendanceController.java	// 메뉴/흐름만
+  	|- model
+   	|   	|- DBConnector.java		// DB와 연결
+   	|   	|- StudentDAO.java		// SQL/JDBC
+   	|  	|- AttendanceDAO.java		// SQL/JDBC
+   	|   	|- StudentDTO.java		// 데이터 묶음
+   	|   	|- AttendanceDTO.java		// 데이터 묶음
+  	|- view
+          	|- AttendanceView.java		// 입력/출력만
+
+2) TABLE
+TBL_STUDENT	-- 학생테이블
+	STU_NUMBER 학번 숫자 PK
+	STU_NAME   이름 문자 NOT NULL
+	STU_MAJOR  전공 문자 NOT NULL
+
+TBL_ATTENDANCE	-- 출석테이블
+	ATT_NUMBER 출석번호 숫자 PK
+	STU_NUMBER 학생번호 숫자 FK, NOT NULL
+	ATT_DATE   출석날짜 날짜 NOT NULL
+	ATT_STATUS 출석상태 문자 NOT NULL
+
+시퀀스 생성
+	SEQ_STUDENT NOCACHE NOCYCLE
+	SEQ_ATTE NOCACHE NOCYCLE
+	
+		
+-----------------------------------------------------------------------------------
+[팀 과제] 오후 3:02 2026-02-03
+
+src
+|- com.koreait
+   	|- Main.java				// 시작만
+   	|- controller 		
+   	|   	|- AttendanceController.java	// 메뉴/흐름만
+  	|- model
+   	|   	|- DBConnector.java		// DB와 연결
+   	|   	|- _____DAO.java		// SQL/JDBC
+   	|  	|- _____DAO.java		// SQL/JDBC
+   	|   	|- _____DTO.java		// 데이터 묶음
+   	|   	|- _____DTO.java		// 데이터 묶음
+  	|- view
+          	|- _____View.java		// 입력/출력만
+
+주제 : 쇼핑몰, 영화, 도서관, 병원
+- 4팀 쇼핑몰 : 회원, 상품, 주문
+
+컬럼은 각 테이블마다 5개 이상씩
+요구사항분석 -> 개념적 설계 -> 논리적 설계 -> 물리적 설계 -> 구현
+
+회의록
+회의 주제 : 테이블 설계(모델링)
+회의 시간 : 26/02/03 15:00 ~
+
+
+1. 모델링 진행 후 컨펌
+2. 컨펌 완료 후 프로젝트 구조 생성 / 기능 구현 역활 분담
+3. 팀장이 github 만들고 팀원 초대
+	- 기본 구조 생성
+4. 각 기능 맡은 부분 구현
+
+[팀과제 시간]
+02/03/화	15시 ~ 18시
+02/04/수	2시간
+02/05/목 2시간
+
+
+- 요구사항
+
+	[의류 쇼핑몰 사용자]
+	
+	1. 회원정보에는 회원번호, 아이디, 비밀번호, 주소, 핸드폰 번호, 이름이 필요하다
+	2. 상품정보에는 상품번호, 상품이름, 카테고리, 가격, 재고량이 필요하다
+	3. 주문정보에는 주문번호, 상품번호, 현재상태, 주문날짜, 회원번호가 필요하다
+
+	쇼핑몰 홈페이지 로그인후 개인정보 입력
+	원하는 상품을 검색 후 결제 	
+	카테고리별 쇼핑
+	상품 가격 비교(최저가 / 최고가)
+	주문(주문 -> 상품준비 -> 배송출발 -> 배송완료)
+
+
+- 개념적 설계
+	[회원] 1 : N [주문] N : 1 [상품]
+	
+	엔티티 : 회원, 상품, 주문
+	
+	속성정의 
+		회원 : 회원번호, 이름, 아이디, 비밀번호, 주소, 핸드폰번호
+		상품 : 상품번호, 상품이름, 카테고리, 가격, 재고량
+		주문 : 주문번호, 상품번호, 현재상태, 주문날짜, 회원번호
+
+	식별자 
+		회원번호, 상품번호, 주문번호
+
+- 논리적 설계
+
+	회원			
+
+	회원번호 		숫자 PK		
+	아이디  		문자 UK, NOT NULL	
+	비밀번호 		문자 NOT NULL		
+	주소 		문자 NOT NULL		
+	핸드폰 번호 	문자 NOT NULL
+	이름  		문자 NOT NULL
+	
+	상품			
+
+	상품번호 		숫자 PK			
+	상품이름  	문자 NOT NULL	
+	카테고리 		문자 NOT NULL		
+	가격  		숫자 NOT NULL		
+	재고량 		숫자 NOT NULL 		
+	
+	주문
+	주문번호		숫자 PK	
+	상품번호		숫자 FK
+	현재상태		문자 NOT NULL
+	주문날짜		날짜 NOT NULL
+	회원번호		수사 FK
+
+- 물리적 설계
+
+TBL_USER
+USER_NUMBER NUMBER PK
+========================
+USER_ID VARCHAR2(100) UK, NN
+USER_PW VARCHAR2(100) NN
+USER_NAME VARCHAR2(100) NN
+USER_PHONE VARCHAR2(100) NN
+USER_ADDR VARCHAR2(100) NN
+
+TBL_ITEM
+ITEM_NUMBER NUMBER PK
+========================
+ITEM_NAME VARCHAR2(100) NN
+ITEM_CAT VARCHAR2(100) NN
+ITEM_PRICE NUMBER NN
+ITEM_STOCK NUMBER DEFAULT 0, NN
+
+TBL_ORDER
+ORDER_NUMBER NUMBER PK
+=========================
+ORDER_DATE DATE NN
+ORDER_STATE VARCHAR2(100) CHECK, NN
+USER_NUMBER NUMBER FK
+ITEM_NUMBER NUMBER FK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

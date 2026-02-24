@@ -1,0 +1,340 @@
+day31(js 3일차)
+복습 -> DOM -> 이벤트 -> 라이트 박스 -> 팝업창과 모달창
+
+260211 한컴타자연습
+한타 : 종교
+영타 : the child`s Story
+
+0. 복습
+1) 객체
+	원시타입을 제외한 모든 값은 객체
+	프로퍼티(key+value) + 메소드(값이 함수인 프로퍼티)
+
+	const user = {
+		name : "홍길동",
+		age : 20,
+		printInfo(){
+			console.log(`${name}님 환영합니다`);
+		}
+	};
+
+	객체 접근 방식
+	user.name
+	user['name']
+
+2) 배열 
+	객체타입
+	요소에는 원시값/객체 모두 가능
+	생성 : [], new Array()
+
+3) 배열 함수
+	map() : 변형해서 새로운 배열 생성
+	filter() : 조건에 맞는 것만 추출
+	reduce() : 하나의 값으로 누적
+
+4) 함수
+- 일반함수
+	function 함수명(매개변수){
+		코드작성
+		return 리턴값;
+	}
+
+- 익명함수
+	let 변수명 = function(매개변수){
+		코드작성
+		return 리턴값;	
+	}
+
+- 화살표 함수
+	() => {}
+
+- 콜백함수
+	함수의 매개변수로 전달되는 함수를 의미
+	모듈화를 시키기 위해 원하는 곳에서 실행할 때 사용한다(재사용성)
+
+- 즉시실행함수
+	한번만 사용하는 함수
+	(function (매개변수)){
+		실행할코드;
+	})(매개변수로 넘겨줄 값);
+
+- 재귀함수
+	자기자신을 호출하는 함수
+
+1. DOM ★★★★★★★★
+1) DOM(Document Object Model) 
+	html 태그들을 하나씩 객체화 한 것을 의미한다
+	html 페이지 내용과 모양을 제어하기 위해서 사용하는 객체이며 html 태그당 DOM 객체가 하나씩 생성된다
+	html 태그의 포함관계에 따라서 부모, 자식, 형제 관계로 구성된다
+	html 요소(<h1>, <div>, <input>)을 모두 노드(node)라는 객체로 구조화한다
+
+2) DOM API
+	DOM을 다루기 위한 프로그래밍 인터페이스(메소드, 속성 등)
+	브라우저가 제공하는 Javascript 객체/메소드 집합
+	ex) document.getElementById(), element.innerHTML 등
+
+2. DOM Tree 구조
+	문서 구조를 트리(Tree) 형태로 표현한 것
+	최상위 노드 : document
+	주요 노드 : 요소노드(Element Node) - HTML 태그
+		속성노드(Attribute Node) - 태그 속성
+		텍스트 노드(Text Node) - 텍스트 컨텐츠
+
+	
+	<body>
+	  <div id="box">div box</div>
+	</body>
+
+	document		브라우저가 제공하는 최상위 객체
+	|_ html			요소노드
+	    |_ body		요소노드
+		|_ div (id="box")	div 요소 노드, id="box" div 요소의 속성노드로 존재
+			|_ div box	div의 텍스트 노드
+
+	
+	<body>
+	  <ul id="menu">
+	    <li class="item">home</li>
+	    <li class="item">about</li>
+	  </ul>
+	</body>
+
+	document
+	|_ html
+	   |_ body
+		|_ ul (id="menu")
+		   |_ li (class="item")
+		   |	|_ home 텍스트노드
+		   |_ li (class="item")
+			|_ about 텍스트노드
+
+3. DOM 요소 선택(Selector 종류)
+1) 메소드
+	메소드				반환형태		의미
+	getElementById("id")		단일요소객체	id로 선택(id는 하나)
+	getElementsByClassName("class")	HTMLCollection	실시간/클래스명으로 여러 요소 선택
+	getElementsByTagName("태그명")	HTMLCollection	실시간/태그명으로 여러 요소 선택
+	getElementsByName("name")	NodeList	name 속성 기준 선택
+	querySelector("선택자")		단일요소객체	CSS 선택자 사용, 첫번째만 선택
+	querySelectorAll("선택자")	NodeList	CSS 선택자 사용, 다수 선택 가능
+
+2) HTMLCollection과 NodeList
+		HTMLCollection		NodeList
+업데이트		실시간 반영(동적)		정적 스냅샷
+포함 노드		요소노드만 포함		텍스트, 주석 노드도 포함 가능
+배열 메소드		사용불가			일부 사용가능 forEach 가능
+인덱스 접근		가능			가능
+반복문 사용		for, for ... of사용가능	for, for ... of, forEach 사용가능
+변경 감지		DOM 변경 시 자동반영		생성시점 기준으로 고정됨
+
+	- HTMLCollection은 실시간 반영되는 동적 컬렉션(배열은 아님)
+	- NodeList는 일반적으로 정적 리스트, 일부 배열 메소드 사용가능
+	- querySelector, querySelectorAll은 CSS 선택자 문법 그대로 사용가능
+
++) CSS 선택자
+- 기본선택자
+	태그명
+	#id명
+	.클래스명
+
+- 조합선택자
+	태그.클래스명
+	태그#아이디명
+
+- 자식 선택자
+	태그 > 태그
+
+- 후손 선택자
+	태그 태그
+
+- 형제 선택자
+	태그 + 태그	인접형제 선택자
+	태그 ~ 태그	일반형제 선택자
+
+- 속성 선택자
+	태그[속성명]
+	태그[속성명=값]
+
+- 가상클래스/가상요소 선택자
+	태그:hover	마우스 올렸을 때
+	input:focus	포커스된 입력요소
+	li:first-child	첫번째 자식
+	li:last-child	마지막 자식
+	li:nth-child(2)	2번째 자식
+
+- 전체 선택자
+	*
+
+4. DOM 요소 조작
+	요소의 내용을 조작할 때 사용하는 속성
+
+1) innerHTML
+	요소의 내부 HTML을 나타내는 속성
+	HTML 태그를 포함한 요소의 내용을 변경할 수 있다
+	ex) const test = document.getElementById("test");
+		test.innerHTML = "<strong>안녕</strong>"; => 결과 안녕
+
+2) innerText
+	요소의 텍스트 내용을 나타내는 속성
+	HTML 태그를 고려하지 않고 텍스트 내용만 조작할 수 있다
+	ex) const test = document.getElementById("test");
+		test.innerText = "<strong>안녕</strong>";	=> 결과 <strong>안녕</strong>
+
+3) 속성 조작
+	getAttribute('속성명') 		속성 가져오기
+	setAttribute('속성명', '값') 	속성 설정하기
+	removeAttribute('속성명')		속성 삭제하기
+
+4) 스타일 조작
+	element.style.속성명="값"
+		속성명 : 카멜표기법으로 사용한다
+	ex) background-color => backgroundColor
+
+5. 이벤트
+	발생한 사건을 의미한다
+	사용자가 버튼을 클릭하거나 항목을 선택하는 등의 사건을 이벤트라고 한다
+	이벤트가 발생하면 자바스크립트의 코드가 실행되도록 구현하여 사용자와 상호작용하는 페이지를 만들 수 있다
+
+- 마우스 이벤트
+	click : 요소를 클릭하면 발생
+	mouseover : 마우스 커서를 해당 요소에 올리면 발생
+	mouseout : 마우스 커서가 해당 요소의 영역을 벗어나면 발생
+	...
+
+- 키보드 이벤트
+	keydown : 키보드를 누르는 동안 발생
+	keyup : 키보드를 눌렀다가 뗄 때 발생
+	keypress : 키보드를 눌렀을 때 발생
+	..
+
+- 문서로딩 이벤트
+	load : 문서(웹 페이지)가 로딩이 끝나면 발생
+	unload : 문서를 벗어날 때 발생
+	scroll : 문서가 스크롤되면 발생
+	..
+
+- 폼 이벤트
+	입력이 가능한 요소의 이벤트
+	focus : 폼 요소에 포커스되면 발생
+	blur : 포커스를 잃으면 발생
+	change : 입력값이 바뀌거나 체크상태가 변경되면 발생
+	submit : submit 버튼을 누르면 발생
+	..
+
++) 이벤트를 처리하기 위해 onXXX속성을 사용한다
+	onClick 속성은 이 요소에 클릭이벤트가 발생하면 실행된다
+	속성값안에는 자바스크립트 명령어를 작성한다
+
+6. 라이트박스(Lightbox)
+	현재 페이지를 이동하지 않고 기존 화면위에 레이어를 덮어서 콘텐츠를 확대 표시하는 UI 패턴
+	
+1) 내부 동작 구조
+	작은 이미지 클릭
+	data 속성에서 큰 이미지 경로 읽음
+	숨겨진 모달 레이어를 display:block 처리
+	큰 이미지 src 변경
+	
+2) data 속성
+	data-데이터이름='데이터'
+	브라우저는 무시하는 속성이므로 특별한 기능은 없으며 개발자가 필요한 데이터를 저장하는 속성이다
+	자바스크립트에서는 data속성을 가져와서 사용할 수 있다
+
+3) data 속성 사용방법
+	요소.getAttribute('data-데이터이름')
+	요소.dataset.속성명
+
+7. 팝업창과 모달창
+1) 팝업창
+	현재 페이지에 새로운 브라우저 창을 열어주는 것
+	브라우저 설정에 따라 팝업창을 막아두는 경우가 있다
+	최근엔 사용빈도가 급격히 떨어졌다
+	모바일 환경에서는 거의 사용 안됨
+	
+2) 모달창
+	라이트박스를 하나의 팝업창처럼 사용한다
+	팝업창과 비교했을 때 실제 브라우저 창이 아니라 새로운 레이어를 띄워준다는 차이가 있다
+	css + js로 구현됨
+
++) position
+	static		기본값(top/right 작동하지 않음)
+	relative 	자기자신 기준 이동
+	absolute	부모기준이동
+	fixed		화면 기준 고정
+
+
+8. defer, async
+	웹 브라우저에서 돌아가는 스크립트는 대부분 HTML보다 무겁다
+	용량이 커서 다운로드 받을 때도 오랜 시간이 걸리고 처리할 때도 오래 걸린다
+
+	브라우저는 HTML을 읽다가 <script></script> 태그를 만나면 스크립트를 먼저 실행해야하므로 DOM 생성을 멈춘다
+	src 속성이 있는 외부 스크립트가 적용되어도 동일하다
+
+	- 스크립트에서는 스크립트 아래에 있는 DOM요소에 접근할 수없다
+	DOM 요소에 이벤트 핸들러를 추가하는 등의 사용이 불가능하다
+	- 페이지 위쪽에 용량이 큰 스크립트가 있는 경우 스크립트가 페이지를 막아버린다
+	페이지에 접속하는 사용자들은 스크립트를 다운받고 실행할 때 스크립트 아래 쪽에 있는 페이지를 볼 수 없다
+
+1) defer(지연 스크립트)
+	defer 속성이 있는 스크립트를 백그라우드에서 다운로드 한다
+	지연 스크립트를 다운로드 하는 도중에도 HTML 파싱이 멈추지 않고 defer 스크립트 실행은 페이지 구성을 끝낼때까지 지연된다
+	- 지연 스크립트는 페이지 생성을 절대 막지 않는다
+	- 지연 스크립트는 DOM에 준비된 후에 실행되긴 하지만 DOMConentLoaded 이벤트 발생 전에 실행된다
+	※ defer 속성은 외부 스크립트에만 유효하다
+	<script defer src="스크립트 파일 경로"></script>
+	src 속성이 없으면 무시된다
+
+2) async(비동기 스크립트)
+	페이지와 완전히 독립적으로 동작한다
+
+	- 백그라운드에서 다운로드된다
+	html 페이지는 async 스크립트 다운이 완료되기를 기다리지 않고 페이지 내 콘텐츠를 처리하고 출력한다
+	(async 스크립트 실행중에는 HTML 파싱이 멈춘다)
+	- DOMContentLoaded 이벤트와 async 스크립트는 서로를 기다리지 않는다
+	페이지 구성이 끝난 후에 async 스크립츠 다운로딩이 끝난 경우 DOMContentLoaded는 async 스크립트 실행 전에 발생할 수 있다
+
+
+
+
+
+
+
+
+
+
+- 개인 프로젝트 (클론코딩)
+	git-hub 안 올린 사람들 먼저 git-hub push 할 것
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

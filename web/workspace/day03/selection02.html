@@ -1,0 +1,49 @@
+<!-- 12번 : 고급선택자2 -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고급선택자2</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    a{
+      font-size: 30px;
+      margin: 20px;
+      border: 1px solid black;
+    }
+    /* a:link {
+      color: red;
+    }
+    a:visited {
+      color: yellow;
+    }
+    a:hover {
+      font-size: 10px;
+      color: blue;
+    } */
+    a:first-child {
+      color: red;
+    }
+    a:last-child {
+      color: blue;
+    }
+    a:nth-child(2){
+      color: pink;
+    }
+    a:not(a:nth-child(2)) {
+      font-size: 50px;
+    }
+
+  </style>
+</head>
+ <body>
+  <main>
+    <div><a href="http://www.naver.com">링크1</a><a href="">링크2</a><a href="">링크3</a><a href="">링크4</a><a href="">링크5</a></div>
+  </main>
+  
+ </body>
+ </html>

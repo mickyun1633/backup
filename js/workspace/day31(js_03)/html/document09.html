@@ -1,0 +1,21 @@
+<!-- 10번 : DOM - id를 이용한 선택 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM - id를 이용한 선택 </title>
+</head>
+<body>
+  <!-- div>div#odd{$번째 div입니다}*3 한 후 2번째만 id 삭제 -->
+  <div>
+    <div id="odd">1번째 div입니다</div>
+    <div>2번째 div입니다</div>
+    <div id="odd">3번째 div입니다</div>
+  </div>
+</body>
+<script>
+  console.log(document.getElementById("odd"));
+  document.getElementById("odd").style.backgroundColor="lightblue";
+</script>
+</html>

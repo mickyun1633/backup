@@ -1,0 +1,49 @@
+<!-- 6번 : 내부스타일과 블록요소 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내부스타일과 블록요소</title>
+  <style>
+    * {
+      margin:0px;
+      padding : 0px;
+    }
+    div {
+      width : 100px;
+      height: 100px;
+      border : 1px solid black;
+      /* border : 굵기 형태 색상; 
+      형태 : solid(직선), dotted(점선), dashed(긴 점선)
+      */
+      background-color: aquamarine;
+
+      margin:20px;
+      /* margin 20px로 설정하면 상하좌우 모두 20px의 간격이 생긴다
+      margin은 요소와 요소사이의 간격을 의미하며 두 요소가 상하로 중복되는 경우에는 40px이 아닌 20px 간격만 떨어진다!!*/
+      padding : 20px;
+      /* padding은 테두리와 컨텐츠(내용) 사이의 여백을 의미한다 */
+    }
+
+    span{
+      width: 100px;
+      height: 100px;
+      border : 1px solid black;
+      
+      margin : 20px;
+      padding : 20px;
+      /* 인라인 요소는 margin이 위아래는 적용되지 않는다
+      좌우는 20px, 20px 해서 40px 간격이 생긴다!!*/
+    }
+  </style>
+</head>
+<body>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <span>1</span><span>2</span><span>3</span>
+</body>
+</html>

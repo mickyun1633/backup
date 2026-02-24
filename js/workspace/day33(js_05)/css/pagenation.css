@@ -1,0 +1,56 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  width: 80%;
+  margin: 20px auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+#content{
+  border: 1px solid gray;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#pagenation-container{
+  border:  1px solid gainsboro;
+  text-align: center;
+}
+
+#pagenation {
+  list-style: none;
+  display: inline-flex;
+  /* flex : 자기자신은 block 요소처럼 한줄을 다 차지하고 내부 자식요소들을 가로 정렬(기본값) */
+  /* inline : 줄을 다 차지하지 않음, 옆의 요소와 같은 줄에 배치됨 */
+  /* inline-flex : 자기자신을 inline처럼 행동(옆에 요소와 같은 줄에 붙을수있음)
+      자식요소는 flex처럼 정렬됨
+      버튼안에 아이콘 + 텍스트 정렬 / 입력창 + 아이콘 나란히 배치 */
+  gap : 8px;
+  padding: 0;
+}
+
+#pagenation li {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+#pagenation li:hover{
+  background-color: lightblue;
+  color:red;
+}
+
+#pagenation li.active{
+  background-color: lightgoldenrodyellow;
+  color: red;
+}

@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.big-img {
+  cursor: pointer;
+  border: 2px solid gainsboro;
+}
+
+/* 라이트박스 */
+#lightbox{
+  /* disply: none; */
+  position: fixed;
+  inset: 0;
+  /* inset: 0; => top right bottom left : 0
+  화면 전체를 덮음*/
+  background: rgba(0, 0, 0, 0.8);
+  /* 0, 0, 0 black 0.8 투명도 80% => 오버레이(overlay) */
+  justify-content: center;
+  align-items: center;
+}
+
+#lightbox img {
+  max-width: 80%;
+  max-height: 80%;
+  /* 화면을 넘지 않도록 제한, 반응형처리 */
+}
+
+#close {
+  position: absolute;
+  /* 부모(#lightbox)를 기준으로 위치 지정 */
+  top: 30px;
+  right: 50px;
+  color: white;
+  cursor: pointer;
+}

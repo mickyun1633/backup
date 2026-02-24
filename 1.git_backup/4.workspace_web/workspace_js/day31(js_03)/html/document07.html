@@ -1,0 +1,73 @@
+<!-- 8번 : DOM - 클래스 이름을 이용한 선택 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM - 클래스 이름을 이용한 선택</title>
+  <style>
+    /* .odd{
+      color:red;
+    }
+    .even{
+      color:blue;
+    } */
+  </style>
+</head>
+<body>
+  <H1>클래스 이름으로 선택</H1>
+  <div>
+    <ul>
+      <li class="item">1번째 아이템</li>
+      <li class="item">2번째 아이템</li>
+      <li class="item">3번째 아이템</li>
+      <li class="item">4번째 아이템</li>
+      <li class="item">5번째 아이템</li>
+    </ul>
+  </div>
+</body>
+<!-- <script>
+  const items = document.querySelectorAll(".item");
+  console.log(items);  
+
+  items.forEach((item, index) => {
+    // console.log(item, index);
+    if((index + 1) % 2 === 0){
+      item.classList.add("even");
+    }else{
+      item.classList.add("odd");
+    }
+  });
+
+  const colors = {even : "blue", odd:"red"};
+  console.log(colors);
+
+  items.forEach((item) => {
+    const className = item.classList.contains('even') ? 'even':'odd';
+    // console.log(className);
+    item.style.color = colors[className];
+  })
+</script> -->
+
+<script>
+  const items = document.getElementsByClassName("item");
+  console.log(items); //HTMLCollection 
+
+  //HTMLCollection은 forEach 메소드를 바로 사용하지 못한다
+  //(HTMLCollection 객체는 forEach메소드에 직접 접근 불가)
+  //추가로 사용할 수 있도록 대입해서 사용해야한다
+  //HTMLCollection의 prototype에 forEach메소드를 
+  // Array의 forEach메소드로 설정하는 한 줄이 반드시 필요하다
+  HTMLCollection.prototype.forEach = Array.prototype.forEach;
+  
+  items.forEach((item) => {
+    console.log(item);
+  });
+// document07.html:94 Uncaught TypeError: items.forEach is not a function
+//     at document07.html:94:9
+// HTMLCollection은 배열이 아니기 때문에 Array.prototype의 메소드를 상속받지 않음
+
+
+  
+</script>
+</html>

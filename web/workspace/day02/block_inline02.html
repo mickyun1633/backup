@@ -1,0 +1,39 @@
+<!-- 4번 : CSS 스타일 - 내부 스타일 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS 스타일 - 내부 스타일</title>
+  <style>
+    /* css 주석 */
+    /* 선택자 {
+      color : yellow;
+    }
+    */
+    h1 {
+      color : deeppink;
+    }
+    /* id 선택자 : #id명*/
+    #span-id {
+      color: salmon;
+      background-color: bisque;
+    }
+    /* 클래스 선택자 : .클래스명 */
+    .div-class{
+      color:brown;
+      background-color: yellowgreen;
+    }
+  </style>
+</head>
+<body>
+  <!-- html 주석 --> 
+  <h1>내부 스타일 - id 속성과 class 속성</h1>
+  <span id="span-id">span 요소1</span>
+  <span style="color:darkblue; background-color: beige;">span 요소2</span>
+  <!-- 인라인 스타일과 내부 스타일로 CSS가 겹칠경우 
+   인라인 스타일의 우선순위가 높으므로 인라인 스타일에서 적용한 css가 실행된다-->
+  <div class="div-class">div 요소1</div>
+  <div class="div-class">div 요소2</div>
+</body>
+</html>

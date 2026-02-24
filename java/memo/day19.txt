@@ -1,0 +1,264 @@
+day19(java 17일차)
+총 복습 팁 과제
+
+팀 과제
+- 도서 대출 프로그램
+- 사용자는 로그인하고 책을 대출할 수 있음(최대 30권)
+- 책은 대출 가능 상태일 때만 대출 가능
+- 객체지향 설계 원칙(상속, 다형성, 추상화, 인터페이스, 예외처리, 컬렉션 프레임워크)
+	단일 책임 원칙(SRP : Single Responsibility Principle)
+
+1번 홍성인   사용자 설계자    User, LoginManager   
+        
+User 추상클래스 설계
+사용자 기본정보
+LoginManager 클래스 설계
+(Map에 사용자 저장/조회)
+사용자 로그인 기능 구현
+
+2번 윤철민   회원 기능 담당   Member  
+
+User 클래스 상속
+List 필드
+로그인 메소드 오버라이딩
+도서대여 메소드
+도서반납 메소드
+대출중인 책 목록 확인 메소드 
+  
+3번 서서울   도서 설계자   Book, Borrow 인터페이스   
+  
+Borrow 인터페이스
+추상 메소드 2개(대여 -> 예외 던지기, 반납)
+Book 클래스 설계
+도서와 관련된 기본정보
+도서 대출 메소드 오버라이딩
+equals, hashCode 오버라이딩
+
+4번 김재민   서비스 로직 설계자   LibraryService      
+
+리스트 필드
+도서목록 출력 메소드
+도서 검색 메소드
+도서 대여 메소드(매개변수 2개 = Member, 도서제목)
+도서 반납 메소드(매개변수 2개 = Member, 도서제목)
+
+5번 서서울   예외클래스   
+
+MaxBorrowException      사용자 정의 예외 클래스
+BookNotAvailableException
+BookAlreadyException
+ConsoleUI      ConsoleUI 클래스의 메소드 6번과 나눠서 작성할 것
+                  
+6번 오명근    UI 및 실행   ConsoleUI, LibraryApp 
+
+ConsoleUI 클래스
+번호로 입력(Scanner 입력)
+메뉴 메소드
+대출할 책 목록 메소드
+반납할 책 목록 메소드
+LibraryApp 클래스
+main메소드
+---------------------------------------------------------------------------
+2번 윤철민   회원 기능 담당   Member  
+
+User 클래스 상속
+List 필드
+로그인 메소드 오버라이딩
+도서대여 메소드
+도서반납 메소드
+대출중인 책 목록 확인 메소드
+
+
+클래스명 : Member
+User클래스 상속받기
+List 필드 선언
+User 클래스 상속후 -> login 메소드 오버라이딩
+
+
+
+
+day19(java 17일차)
+총 복습 팀 과제
+
+팀 과제
+- 도서 대출 프로그램
+- 사용자는 로그인하고 책을 대출할 수 있음(최대 30권)
+- 책은 대출 가능 상태일 때만 대출 가능
+- 객체지향 설계 원칙(상속, 다형성, 추상화, 인터페이스, 예외처리, 컬렉션 프레임워크)
+   단일 책임 원칙(SRP : Single Responsibility Principle)
+
+1번   사용자 설계자    User, LoginManager      User 추상클래스 설계
+                           사용자 기본정보               userId, userPw, login method
+                           LoginManager 클래스 설계   
+                           (Map에 사용자 저장/조회)   
+                           사용자 로그인 기능 구현            메소드명 : Login
+
+
+2번   회원 기능 담당   Member             User 클래스 상속
+                          List 필드         
+                           로그인 메소드 오버라이딩            대여한권수(countBook)(int), 대여가능권수(borrowBookCount)(int), 대여한 책 이름(borrowBook)(String형 list)
+                           도서대여 메서드               메소드명 : bookBorrow => 대여했을때 대출중인 책 목록에 추가하는 메서드
+                           도서반납 메서드               메소드명 : bookReturn => 반납했을때 책 목록에서 제거하는 메서드
+                           대출중인 책 목록 확인 메소드      
+
+
+3번    도서 설계자   Book, Borrow 인터페이스   Borrow 인터페이스            
+                           추상 메소드 2개(대여 -> 예외 던지기, 반납)
+                           Book 클래스 설계         
+                           도서와 관련된 기본정보               bookName(String), 책 대출 여부(boolean)
+                           도서 대출가능 메소드 오버라이딩            => 대출 가능여부 확인 후, 대출 가능하면 빌릴 책 넣기, 대출 가능하면 대여, 불가능 하면 예외처리
+                           equals, hashCode 오버라이딩            
+               대출 가능 여부((boolean, 30권 이상이면 불가) 
+
+4번   서비스 로직 설계자   LibraryService      리스트 필드                  대여한 책이름 목록(set)
+                           도서목록 출력 메소드               메소드명 : listPrint
+                           도서 검색 메소드               메소드명 : bookFind 
+                           도서 대여 메소드(매개변수 2개 = Member, 도서제목)      
+                           도서 반납 메소드(매개변수 2개 = Member, 도서제목)
+   
+
+5번   예외클래스    MaxBorrowException       사용자 정의 예외 클래스
+            BookNotAvailableException   
+            BookAlreadyException
+            ConsoleUI       ConsoleUI 클래스의 메소드 6번과 나눠서 작성할 것
+                
+  
+6번    UI 및 실행   ConsoleUI, LibraryApp  ConsoleUI 클래스
+                           번호로 입력(Scanner 입력)
+                           메뉴 메소드                  메소드명 : libraryMenu
+                           대출할 책 목록 메소드               메소드명 : borrowList => 대여 가능한 책 목록 출력
+                           반납할 책 목록 메소드               메소드명 : returnList => 반납햘 책 목록 출력
+
+                           LibraryApp 클래스
+                           main메소드
+
+
+id pw 입력 -> 로그인 가능 여부 확인 -> 사용자 정보 출력 -> 1. 대출, 2. 반납, 3. 대출 목록확인 
+
+
+[과제 끝난후 강사님 리뷰] 오전 10:16 2026-01-27
+1. 전체흐름 파악
+	ConsoleUI가 메뉴를 보여줌
+	사용자가 로그인(LoginManager)
+	로그인 성공하면 LibraryService를 통해
+		도서 목록 보기/ 검색 / 대출 / 반납
+	대출 / 반납 과정에서 Book(Borrow interface 구현) + Member(User 상속)
+	조건 위반 시 사용자 예외 발생
+
+2. 역활별 어떤 책임만 갖게 할지(SRP)
+	ConsoleUI	: 입력/출력만 담당
+	LibraryService 	: 책 찾기 / 대출 / 반납 처리 담당
+	LoginManager	: 사용자 로그인 처리 담당
+	Member/User 	: 내 정보 + 내가 빌린 책 목록 상태 담당
+	Book		: 책 정보 + 대출가능 상태 담당
+	예외		: 예외 발생하는 것을 메시지 보여줌 
+
+3. 클래스 설계(어떤 필드/메소드 가져가야하는지)
+1번 	User 추상클래스 + LoginManager
+	User(abstract)
+		필드(기본정보) : name, id, pw
+		생성자(기본생성자, 매개변수 생성자)
+		메소드
+		getter메소드 : getter만, sette(pw)
+		추상메소드	   : boolean login(Stirng id, String pw);
+ 
+	LoginManager	
+		필드(private) : Map<String, user> userMap
+		메소드
+		userMap 사용자 추가 : addUser(User user)
+		사용자 조회		 : findUser(String userId)
+		사용자 로그인 	 : login(String id, String pw)
+					userMap에서 찾고 없으면 로그인 실패
+					있으면 결과 반환
+
+2번	Member	
+		extends User
+		필드	: List<book>
+		상수 	: MAX_BOOK = 30
+		오버라이딩 	: login() 비밀번호 검사 로직 구성
+		메소드
+			도서대여 메소드	     => 30권 초과면 예외, 정상이면 추가
+			도서반납 메소드	     =>	목록에 존재하는지 체크(없으면 false)
+			대출중인 책 목록 확인 메소드 => 내가 빌린 책인지 확인	
+
+3번	Book
+		Borrow interface
+		추상메소드 2개 : 대여 예외던지기, 반납 예외 던지기
+		Book class	implements Borrow	
+			필드 : title, author, publish, availble
+			대여 => true면 false로, false면 예외발생
+			반납 => available false를 true로, true면 예외발생
+			equals(), hashCode() 재정의
+				=> title + author + pulish
+
+4	
+
+
+
+
+
+
+
+144,480
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

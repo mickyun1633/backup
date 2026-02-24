@@ -1,0 +1,17 @@
+git command
+
+
+
+
+1 .마지막 커밋 메시지 수정
+
+- git commit --amend -m "새로운 커밋 메시지"
+	
+		아직 push 전이면 log 확인후 push 진행
+
+- git push --force
+
+		만약 이미 push 했다면, 강제로 push 진행 해야함
+		(공유 레포지토리이면 커밋 메시지에 커밋 메시지 오타수정이라고 다시 push하는게 안전)
+
+- git

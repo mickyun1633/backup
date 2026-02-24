@@ -1,0 +1,87 @@
+/* 개인 CloneCoding Musinsa_윤철민 .css */
+
+*{
+  margin: 0px;
+  padding: 0px;
+  /* background-color: white; */
+  font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Apple SD Gothic Neo",
+  "Noto Sans KR",
+  "Malgun Gothic",
+  sans-serif;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ====================
+  HEADER
+=========================*/
+.header{
+padding: 0px;
+width: 2000px;
+height: 120px;
+display: flex;
+align-items: top;
+background-color: black;
+color: snow;
+}
+
+
+
+
+
+
+.header-left-text {
+font-size: 11px;
+font-display: right;
+font-weight: 800;
+letter-spacing: 0.15em;
+color: #FFFFFFCC;
+}
+
+.header-right-text {
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 0.15em;
+color: #FFFFFFCC;
+}
+
+
+
+
+.header--text-box{
+  color: white;
+  font-size: 14px;
+  font-weight: 600px;
+  word-spacing: 8px;
+  letter-spacing: 0.5px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,250 @@
+day33 오전 9:09 2026-02-13
+
+복습 -> Jquery -> 배너 만들기 -> 패스워드 토글 -> 페이지 네이션
+
+0. 복습
+1)  동기(Synchronous)
+	한 작업이 끝날 때까지 다음 작업이 시작되지 않음
+	순서 보장, 이해하기 쉬움, 대기 시간이 길어질 수 있음
+	ex) 카페에서 주문 후 음료가 나올 때까지 서서 기다리는것
+
+2) 비동기(Asynchronous)
+	작업을 요청해두고 끝날때까지 기다리지 않음
+	대기시간 동안 다른 작업 가능, callback/Promise,async/await 개념과 함께 등장함, 코드 흐름이 복잡해질 수 있음
+	ex) 카페에서 주문 후 진동벨 받고 자리에 앉아 다른일 하는 것
+
+3) 싱글쓰레드(Single Thread)
+	실행 흐름이 하나
+	한번에 하나의 작업만 실행, 구조가 단순함, CUP 100% 활용하기 어려움
+	ex) Javascript(기본 실행 모델)
+		javascript는 single thread지만 비동기 처리는 가능함(event loof 덕분)
+
+4) 멀티쓰레드(Multi Thread)
+	여러 실행 흐름이 동시에 존재
+	동시에 여러 작업 처리 가능, 병렬 처리 가능, 동기화 문제(경쟁상태, 데드랑 등) 발생가능
+	ex) Java, C++
+
+5) 동기와 비동기, 싱글쓰레드와 멜티쓰레드
+
+	동기/비동기 	기준 : 작업 완료를 기다리는가?	(기다림의 문제)
+	싱글/멀티쓰레드	기준 : 실행흐름이 몇개인가?	(실행 흐름의 개수 문제)
+
++) 조합
+	싱글쓰레드 + 동기 	가능 	기본 C program
+	싱글쓰레드 + 비동기	가능	Javascript
+-	멀티쓰레드 + 동기 	가능	Java Thread join
+	멀티쓰레드 + 비동기	가능	고성능 server
+
+6) Promise
+	비동기 작업의 결과를 감싸는 객체
+
+	resolve()	성공
+	
+	reject()	실패
+
+	.then()		성공처리
+
+	.catch()	에러처리
+
+	.finally()	무조건 실행
+
+
+
+- 기본 구조
+	const promise = new Promise((resolve, reject) => {
+		if(성공){
+			resolve("성공결과");
+		}else{
+			reject("에러");
+		}
+	});
+
+
+	promise.then(result => { console.log(result); })
+	.catch(error => { console.log(error); });
+
+7) async / await
+	Promise를 더 읽기 쉽게 쓰는 문법
+
+- 기본 구조
+	async function getData(){
+	 try{
+	   const result = await fetch("http:// URL 주소");
+	   console.log(result);
+	 } catch {
+	   console.log(error);
+	 }
+
+	}
+
+	async 함수는 항상 Promise를 반환
+	await은 Promise가 끝날때까지 기다림
+	try/catch로 에러 처리
+
+8) fetch
+	fetch()는 browser에서 http 요청 보내는 API
+
+- 기본 GET 요청
+	fetch("http:// URL 주소")
+	.then(response => response.json())
+	.then(data => console.log(data))
+	.catch(error => console.error(error));
+
+- 기본 POST 요청
+	fetch("URL 주소", {
+	   method:"POST",
+	   headers : {
+		"Content-Type":"application/json"
+	   },
+	   body : JSON.stringify({name:"짱구"})
+	});
+
+
+-----------------------------------------------------------------------------
+
+
+1. Jquery
+	Javascript library
+	library는 일박적으로 다운받아야 사용이 가능하지만 jquery는 network 상으로 연결만 하면 간편하게 사용할 수 있다
+
+	https://cdnjs.com/libraries/jquery
+	https://releases.jquery.com/
+
+<script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+	src : 외부 server(CDN)에서 file download / Jquery library 요청부분
+
+	integrity (SRI - Subresource Integrity) : 보안 검증용 해시값
+		browser download file의 해시값을 계산해서 integrity에 적힌 값과 비교함
+		같으면 실행, 다르면 실행 차단
+		무결성(CDN이 해킹되거나 file이 변조되었을 때 보호하기 위함)
+
+	crossorigin="anonymous" : SRI를 사용할 때 거의 필수 옵션
+		CORS 요청 방식 지정
+		인증 정보(쿠키 등) 없이 요청
+		integrity 검증이 제대로 작동하도록 보장
+
+
+2. Jquery 문법
+1) 기본 선택자
+	$(`선택자`)
+	
+	jquery는 기본적으로 선택자를 이용하여 요소를 가져온다
+	css 선택자와 동일하게 작성하면 된다
+	jquery로 요소를 가져오면 javascript의 객체가 아니라 jquery 객체 타입이다
+	즉, jquery에서 제공하는 여러 기능을 사용할 수 있게 된다
+	jquery로 요소를 가져와 변수에 저장할 경우 javascript 객체인지 jquery의 객체인지 구분하기 힘들다
+	그러므로 jquery 객체를 저장하는 변수는 이름에 $를 붙여준다
+
+2) 기타 선택자
+	jquery에서는 기본 선택자를 도와주는 여러 기타 선택자를 메소드 형태로 제공한다
+	기본 선택자 뒤에 .을 사용하고 작성한다
+	$('선택자').기타선택자()
+
+	prent()			바로 위의 부모요소를 선택한다
+	
+	parents()		상위 요소를 모두 선택한다(조상)
+	
+	children()		자식 요소를 모두 선택한다
+
+	prev()			이전 형제 요소를 선택한다(형)
+
+	prevAll()		이전 형제 요소 전체를 선택한다(형들)
+
+	next()			다음 형제 요소를 선택한다(동생)
+
+	nextAll()		다음 형제 요소 천제를 선택한다(동생들)
+
+	closest('선택자')		부모부터 조상까지 모두 탐색하여 해당 선택자와 일치하는 요소를 가져온다 
+
+	find('선택자')		자식부터 자손까지 모두 탐색하여 해당 선택자와 일치하는 요소를 가져온다
+
+
+3) 기본 선택자로 여러 요소를 선택했을 때 사용하는 기타 선택자
+	first()			여러 요소 중 첫번째를 선택한다
+
+	last()			여러 요소 중 마지막을 선택한다
+
+	eq(index)		여러 요소 중 index 번호를 사용하여 선택한다
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

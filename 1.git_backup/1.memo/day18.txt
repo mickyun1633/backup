@@ -1,0 +1,383 @@
+day18 (java 16일차)
+
+복습 -> 컬렉션 프레임워크 -> list -> set -> map -> 총 복습 정리
+
+0. 복습
+1) API (Application Programming Interface)
+	내부 API
+		JDK 설치 시 제공해주는 기본 API
+	외부 API
+		다른 개발자들이 개발한 packge 및 class를 의미
+		jar file로 배포하며 java project에 build path에 추가하여 사용할 수 있다	
+
+2) Stream API
+	선언형, 함수형 방식으로 처리하기 위한 API
+	여러개의 데이터를 흐름처럼 하나씩 처리하기 위한 도구
+	데이터를 저장하지 않는다
+	데이터를 하니씩 처리한다
+	한 번만 사용할 수 있다
+
+-연산 구조 
+	스트림 생성 -> 중간연산 -> 최종연산
+	
+- 중간연산 : 스트림을 변환하고 다시 스트림 변환함(lazy)
+
+	메소드 		의미
+
+	filter()	조건에 맞는 요소만 걸러냄
+	map()		요소 변환
+	mapToInt()	IntStream으로 변환
+	flatMap()	스트림 평탄화
+	sorted()	정렬
+	peek()		중간 확인용(디버깅)
+	limit()		갯수 제한
+	skip()		앞부분 건너뜀
+	takeWhile()	조건까지 가져옴(java 9+)
+
+- 최종연산 : 스트림을 소모하고 결과를 만듦
+
+	메소드 		의미
+
+	forEach()	순회처리	
+	collect()	collection으로 변환
+	toList()	List로 변환(java 16+)
+	reduce()	누적연산
+	count()		갯수 세기
+	findFirtst()	첫요소 반환
+	findAny()	아무거나 하나
+	anyMatch()	조건 만족 여부
+	allMatch()	모두 만족 여부
+	noneMatch()	모두 불만족
+	
+
++) Optional
+	null 대신 쓰는 래퍼클래스
+	
+Optional<T>
+	=> 값이 있을 수도/없을 수도 있음을 표현하는 객체
+
+- Optional 만드는 방법
+(1) of() -> null 무조건 예외
+	Optional<String> o = Optional.of("hi")
+	Optional<String> o = Optional.of(null);	//예외발생
+
+(2) ofNullable()
+	Optional<String> o = Optional.ofNulla	//empty로 바뀜
+
+(3) empty()
+	Optional<String> o = Optional.empty();	//명시적으로 비어있음을 표현
+
+3) Object class
+	모든 클래스의 최상위 부모 클래스
+	
+	toString()	참조값을 문자열형태로 변환
+
+	equals()	참조값 비교
+			객체를 비교하고 싶다면 비교 기준을 재정의해서 사용할 수 있다
+
+	hashCode()	객체의 memory 번지를 이용해서 HashCode를 생성하기 때문에 객체마다 다른 정수값을 return
+			두 객체가 동등함을 비교 시 hashCode()와 equals() method를 같이 사용하므로
+			equals() 재정의하면 hashCode()도 변경해야한다
+
+4) Wrapper class
+	기본 자료형들의 class type
+
+- Boxing Unboxing
+	기본 타입의 값을 포장 객체로 만드는 과정 박싱
+		믈래스타입 참조변수 = 클래스타입.valueOf(일반타입의값);
+		클래스타입 참조변수 = 일반타입의값;
+
+	포장 객체에서 기본 타입의 값을 얻어내는 과정 언박싱
+		일반타입 변수 = 참조변수.000Value();
+		일반타입 변수 = 참조변수;
+
+1. Collection Framework (컬렉션 프레임워크)
+	java.util packge에 포함
+	많은 data를 쉽고 효과적으로 관리할 수 있는 표준화된 방법을 제공하는 class들의 집합
+
+1) Interface 분류
+	
+		Interface 분류 		특징			구현class
+
+Collection	List			순서를 유지하고 저장		Vactor, ArrayList, LinkedList
+					중복값 저장 가능
+
+		Set			순서를 유지하지 않고 저장	HashSet, TreeSet
+					중복값
+
+Map					키와 값으로 구성		HashMap, TreeMap, Hashtable
+					키는 중복 불가능
+					값을 중복 가능
+
+1. List Interface
+	data의 순서를 보장한다
+	중복된 값을 허용한다
+
+1) List 구현 class
+	Vector : 용량관리, 보안성강화, 처리량 감소 => 지금은 거의 사용되지 않는다
+	
+	ArrayList : 배열과 동일하게 index로 date를 관리한다
+			collection class들 중 실무에서 가장 많이 사용되는 class이다
+			추가, 삭제는 느리지만 탐색이 생대적으로 빠르다
+
+	LinkedList : 추가 삭제는 빠르지만 탐색이 상대적으로 느리다
+
+2) 제네릭(Generic)
+	결졍되지 않은 type을 parameter로 처리하고 실제 사용할 때 구체적인 type으로 대체시키는 기능
+	type을 미리 정의하지 않고, 나중에 결정
+	
+	Class<T> obj = new Class<T>();
+	Class<T> obj = new Class<>();	//java 7+
+
+	클래스명 참조변수 = new 생성자();
+	클래스명<T> 참조변수 = new 생성자<T>();
+	변수를 선언할 때 동일한 타입으로 호출하고 싶다면 생성자 호출시 타입을 명시하지 않고 <>만 붙일수있다
+	<>를 다이아몬드 연산자라고 한다
+	클래스명<T> 참조변수 = new 생성자<>();
+
+	Iterable<T> java의 Generic programing을 지원하는 Interface 중 하나이다
+	자바 컬렉션 프레임워크에서 많이 사용되며 컬렉션 내부의 요소들을 반복(iterate) 하고자 할 때 사용한다
+
+- Generic을 사용하는 이유
+	(1) Generic을 사용하지 않는다면 field에 type별로 class를 만들어야한다
+	(2) Generic 대신 Object type을 사용한다면 Down casting을 해야한다
+	(3) Generic은 type을 제한할 수 있다(Object는 모든 type을 다 받을 수 있기 때문이다)
+
+	type 안정성, Down casting 제거, 컴파일 에러
+
++) Generic 제한 <T extends> 상한 제한
+	이 type만 쓰라고 범위를 제한 하는 것
+
+- 기본 문법
+	<T extends 부모클래스>
+	<T extends 인터페이스>
+
+- PECS 공식
+	Producer(읽기) ->	extends
+		<? extends T>		값생산 -> 읽기용
+	Consumer(쓰기) ->	super
+		<? super T>		값 소비 -> 쓰기용
+
+공용 출력 method
+	void print(List<?> list)
+숫자 처리	
+	void calc(List<? extends Number> list)
+추가 
+	void add(List<? super Integer> list)
+유틸
+	staticN<T> void swap(T[] arr, int i, int j)
+
+- 타입 소거(Type Erasure)
+	컴파일 후 Generic 사라짐
+
+	List<String>
+	List<Integer>
+
+	RunTime List
+
+	if(obj instanceof List<String>) x
+
+3) 배열과 ArrayList의 차이
+	배열은 길이에 제한을 두어야할 때 자주 사용하고
+	ArrayList는 몇개의 data가 들어올지 알 수 없을 때 사용한다
+
+4) ArrayList Method
+
+	int size()			List의 요소 개수를 반환
+	boolean isEmpty()		List가 비어있는지 여부 확인
+	boolean contains(Object o)	주어진 객체가 List에 포함되어있는지 여부를 확인
+	E get(int index)		주어진 index 위치에 있는 요소 반환
+	E set(int index, E element)	주어진 index 위치에 있는 요소를 다른 요소로 대체
+	boolean add(E e)		List에 요소 추가
+	boolean remove(Object o)	List에서 지정된 객체를 삭제
+	int remove(int index)		List에서 지정한 index의 요소 삭제
+	void clear()			List의 모든 요소를 제거하여 비움
+	int indexOf(Object o)		주어진 객체의 첫번째 등장하는 index를 반환
+	int lastIndexOf(Object o)	주어진 객체의 마지막 동작하는 index를 반환
+	
+
+2. set Interface : 집합
+	data의 순서를 보장하지 않는다
+	data의 중복을 허용하지 않는다
+
+1) 구현 class
+	HashSet
+	set interface를 구현한 가장 대표적인 class
+	중복되는 값을 저장하면 무시한다
+	index가 존재하지 않아 순서를 보장하지 않으며 ArrayList나 배열처럼 값을 가져오는 것이 불가능하다
+	hashCode()가 변환하는 hashCode를 이용하여 data를 처리하며 속도가 상대적으로 빠르다
+	위의 특징 때문에 값의 존재여부를 파악할 때 사용하기 좋다
+F	}
+2) Iterator : 반복자
+	collection에 저장된 data를 순회하고 가져ㅏ오기 위한 interface
+	Iterator는 collection의 종류와 상관없이 동일한 방식으로 data를 가져올 수 있기 때문에 collection freamwork를
+	일관된 방식으로 다룰 수 있게 해준다(type)
+	값을 가져올 때는 커서(cursor)를 이용하여 collection을 순회하며 다음 값을 가리키고 값을 가져올 수 있다
+	어떤 자료구조든 Iterator로 변환하면 Iterator 만의 방식으로 순서를 만들고 값을 가져올 수 있다
+
+	Set<E> set1 = new HashSet<>();
+	Iterator<E> iter = set1.iterator();
+
+- interator()
+	ArrayList, HashSet 등의 collection 객체를 Interator type으로 변환할 때 사용하는 method
+
+- hasNext()
+	다음 값의 유무를 검사하여 boolean type으로 반환한다
+
+- next()
+	다음 값을 가져온다 아무값도 없다면 예외가 발생한다
+
+3. Map
+	data의 순서를 보장하지 않는다
+	data를 Key와 Value 한쌍으ㅏ로 저장하여 Key로 data에 접근할 수 있다
+	그러므로 Key는 ArrayList의 index와 비슷한 역활을 하며 중복을 허용하지 않는다
+
+1) 구현 class
+	HashMap
+	hashCode()가 반환하는 hashCode를 이용하며 검색 속도가 상대적으로 빠르다
+	이미 저장된 Key를 가진 한쌍의 data를 넣으면 가장 마지막에 넣은 Value로 수정된다
+	(Value는 중복가능, 수정가능)
+	저장되지 않은 Key를 가진 한쌍의 data를 넣으면 새롭게 추가된다
+
+2) Hash : data를 다루는 기법
+	키(Key)는 해시함수(Hash Funtion)를 통해 해시(hash)로 변경되며
+	해시는 값(Value)과 매칭되어 저장소에 저장된다
+
+- 키(Key) : 고유한 값이며 해시함수 input이 된다
+	다양한 길이의 값이 될 수 있다
+	이 상태로 저장소에 저장되면 다양한 길이만큼의 저장소를 구성해 두어야하기 때문에 해시함수로 값을 바꾸어
+	저장되어야 공간의 효율성을 추구할 수 있다
+
+- 해시함수(Hash Function) : 키(Key)를 해시(hash)로 바꿔주는 역활을 한다
+	다양한 길이를 가지고 있는 키(Key)를 일정한 길이를 가지는 해시(hash)로 변경하여 저장소를
+	효율적으로 운영할 수 있도록 도와준다
+	다만, 서로 다른 키(Key)가 같은 해시(hash)가 되는 경우를 해시 충돌이라고 하는데
+	해시 충돌을 일으키는 확률을 최대한 줄이는 함수를 만드는 것이 중요하다
+
+- 해시(Hash) : 해시 함수의 결과물
+	저장소(bucket, slot)에서 값(value)과 매칭되어 저장된다
+
+- 값(Value) : 저장소에 최종적으로 저장되는 값으로 키(Key)와 매칭되어 저장, 삭제, 검색, 접근이 가능하다
+
+hash table : hash 이용한 저장 공간
+
+	[0]	null
+	[1]	cat
+	[2]	dog
+	[3]	null
+	[4]	apple
+
++)	HashSet		HashMap
+
+저장형태	값만 저장		(key, value)저장
+중복	x		key x, value o
+용도 	중복제거 		data 매핑
+			내부적으로 HashMap 사용
+
++) HashMap, HashSet도 Hash라는 기법을 사용하여 data를 저장하고 관리한다
+	배열의 구조를 가지는 일반 배열, ArrayList와 비교했을때 양쪽 다 index 번호를 사용한다는 점에서 
+	빠른 속도를 가진다
+	배열의 구조는 내가 저장하는 값이 어느 index에 존재하는지 별도로 관리해줘야하지만 
+
+3) Entry
+	java collection freamwork에서 key-값 쌍을 표현하는 interface
+	주로 Map interface와 함께 사용한다
+
+	Entry<K, V>는 Map interface 내부에 정의된 중첩 interface Map.Entry<K, V>
+	한개의 키와 그에 대응하는 값을 저장하는 구조를 제공한다
+	Map의 모든 요소를 순회하거나 키와 값을 개별적으로 처리할 때 사용한다
+
+- Map.Entry의 medhod
+
+	k getKey()			Entry의 키를 반환
+	v getValue()			Entry의 값을 반환
+	v setValue(V value)		Entry의 값을 주어진값으로 설정하고 이전값을 반환
+	boolean equals(Object o)	다른객체와 이 Entry를 비교
+	int hashCode()			Entry의 hashCode를 반환
+	entrySet()			Set<Map.Entry<k, V>> 형태로 Map의 모든 키와 값 쌍을 순회
+
+- Map
+   |_ Entry<K, V>	Entry는 Map안에 포함된 interface
+
+- Map.Entry의 용도
+	Map 전체 순회할 때
+	key와 value를 동시에 사용할 때
+	Map data를 가공할 때
+
+	for(Map.Entry<K, V> entry : map.entrySet())
+
++) collection과 collections 차이점 (전혀 다름)
+
+Collection
+	interface(자료구조의 부모 interface) List, Set, Queue, ...
+	규칙
+	객체생성 x
+	add, remove
+	data 묶음의 기본 규칙
+
+	Collection<String> co = new ArrayList<>();
+
+Collections
+	class
+	도구
+	객체생성 x
+	sort, max
+	static method만 있음
+
+	Collections.sort(list);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

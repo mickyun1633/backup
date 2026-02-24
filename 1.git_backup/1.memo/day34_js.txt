@@ -1,0 +1,325 @@
+day34(js 6일차) 오전 11:35 2026-02-19
+json 변환 -> js 복습 -> java 전체 복습 -> 쓰레드
+
+1. Javascript JSON 변환
+1) JSON
+	data를 주고받기 위한 text 형식
+	server 클라이언트로 data를 보낼 때 Javascript 객체를 그래도 전송할 수 없음
+	문자열로 변환해서 전송하고 받은 쪽에서 다시 객체로 복원하는 방식을 사용함
+
+	[클라이언트]			[서버]
+	Javascript 객체 -> (stringify) -> JSON 문자열 -> 전송
+	Javascript 객체 <- (parse)     <- JSON 문자열 <- 수신
+	
+	JSON.stringify()	Javascript 객체를 JSON 문자열로 변환
+				JSON 문자열을 Javascript 객체로 변환
+
+2) JSON 문법 규칙
+	javascript 객체(key에 따옴표 없어도 됨)
+	
+	const parson = {
+		name : "홍길동",
+		age : 20
+	};
+
+JSON 문자열(key도 반드시 큰 따옴표)
+	'{"name":"홍길동", "age":"20"}'
+
+- key 반드시 큰따옴표(작은따옴표 불가)
+- 문자열값도 큰따옴표(작은따옴표 불가)
+- 마지막 항목에 쉼표 불가
+- 함수, undefined 불가(문자열, 숫자, 배열, 객체, boolean, null만 가능)
+
+3) JSON.stringify()
+	javascript 객체를 JSON 문자열 반환
+
+4) JSON.parse()
+	JSON 문자열을 javascript 객체로 변환
+
+2. Javascript 총 복습
+1) javascript 
+	객체 기반의 script 언어
+	HTML(구조) + CSS(디자인) + JS(동작)으로 web을 구성함
+	컴파일 없이 browesr의 인터프리터가 바로 실행하며, Node.js로 server 환경 구축 가능함
+
+2) Data Type
+- 원시 타입
+	number	(정수, 실수, NaN, Infinity)
+	boolean	(true, false)
+	string	("", '', ``)
+
+- 객체 타입
+	object	(키-값 쌍 구조)
+	array	(순서가 있는 목록)
+	function(코드 블록을 정의하고 호출 가능한 객체)
+
+3) 변수선언
+	var	//함수 스코프, 재선언가능 => 사용지양      초기화전 접근 undefined
+   	let	//블록 스코프, 재선언 불가능, 재할당 가능   초기화전 접근 ReferenceError
+   	const	//블록 스코프, 재할당 불가능(상수)
+
+4) 연산자
+	동등, 일치
+	'1' == 1		// 값만 비교 	true
+	'1' === 1 		// 값과 타입 비교	false
+
+	병합연산자
+	let name = null;
+	let result = name ?? "기본값";	// null이거나 undefined일 때만 오른쪽 반환
+
+	옵셔널 체이닝
+	user?.address?.city;	// null이거나 undefined 접근 시 에러 방지
+
+5) 형번환
+	String(123)	=> "123"
+	Number("123")	=> 123
+	Boolean(0)	=> false (Falsy : 0, 0.0, "", null, undefined, NaN)
+
+6) 대화상자
+	alert("메시지")		=> 확인만 있는 알림창
+	confirm("질문")		=> true / false 반환
+	prompt("입력받을 내용")	=> 입력값(문자열) 반환
+
+7) 함수
+- 일반함수
+	function 함수명(매개변수){
+		// 실행할 code
+		return 매개변수;
+	}
+
+	함수명(인수);
+
+- 익명함수 
+	const 변수 = function (매개변수) {
+		// 실행할 code
+		return 매개변수;
+	};
+
+	변수명(인수);
+
+- 화살표함수
+	callback함수에서 많이 사용
+	const 변수 = (매개변수1, 매개변수2) => 매개변수1 + 매개변수2;
+
+	[1, 2, 3].map(n => n*2);	// 2 4 6
+
+- 콜백함수
+	함수의 매개변수로 전달되는 함수
+	btn.addEventListener("Click", function() {});
+
+- 즉시실행함수
+   	(function(){
+      		console.log("즉시실행");
+   	})();
+
+- 재귀함수
+	자기 자신을 호출하는 함수
+	종료조건을 생각해야한다
+
+8) 객체
+	const 객체명 = {
+		name:"철수",
+		key:value,
+		key:function () {}
+	};
+
+- 객체 접근 방법
+	.표기법
+	객체명.name
+	[]표기법
+	객체명['name']
+
+- 객체의 프로퍼티 추가/삭제
+	객체명.key = value;
+	delete 객체명.key;
+
+9) 배열
+   const ar = [1, 2, 'a', true];
+
+- 배열 생성
+   배열 리터럴
+   const ar = [1, 2, 'a', true];
+
+   생성자 함수
+   const ar2 = new Array(3);
+
+- 배열 반복문
+   for(let i; i<배열명.length; i++){}
+
+   for(let i in 배열명){}   //key(인덱스)순회
+   
+   for(let i of 배열명){}   //value(값)순회
+
+- 고차함수
+   map() : 변형해서 새로운 배열 생성
+   filter() : 조건에 맞는 요소만 추출
+   reduce() : 하나의 값으로 누적
+
+10) 자바스크립트 엔진 구조
+   call stack   현재 실행중인 동기 코드(LIFO)
+   Heap      객체, 배열, 함수저장(동적메모리)
+   Task Queue   비동기 콜백 대기(setTimeout, 이벤트)
+   Microtask Queue   Promise.then, async/await 대기
+   Event Loop   Call Stack이 비면 Queue에서 꺼내 실행
+
+11) DOM
+   HTML 태그를 객체로 구조화 한 것
+   트리 구조로 표현되며 최상위 노드 document
+   
+12) DOM 요소 선택
+   document.getElementById("id명")      //단일요소
+   document.getElementsByClassName("클래스명") // HTMLCollection
+   document.getElementsByTagName("태그명")    //HTMLCollection
+   document.querySelector("선택자")      //단일요소
+   document.querySelectorAll("선택자")   //NodeList
+
+   HTMLCollection      NodeList
+업데이트   실시간         정적
+배열메소드   사용불가         forEach 가능
+
+13) DOM 조작
+- 내용 조작
+   .innerText
+   .innerHTML
+   .textContent
+
+- 속성 조작
+   .getAttribute("속성명")
+   .setAttribute("속성명", "속성값")
+   .removeAttribute("속성명")
+
+- 스타일 조작
+   .style.backgroundColor = "값"   //카멜표기법
+   
+- 요소 생성/추가/삭제
+   document.createElement("태그");
+   요소.appendChild(변수명);
+   요소.removeChild();   
+
+- 클래스 조작
+   요소.classList.add("클래스명")
+   요소.classList.remove("클래스명")
+   요소.classList.toggle("클래스명");   //토글 : 있으면 제거 없으면 추가
+   요소.classList.contains("클래스명");   //존재 여부 확인
+
+14) 이벤트
+   요소.addEventListener("이벤트명", 콜백함수);
+
+   마우스 : click, mouseover, mouseout
+   키보드 : keydown, keyup
+   문서 : load, scroll
+   폼 : focus, blur, change, submit
+
+15) defer/async
+   <script defer src="./test.js"></script>   백그라운드 다운로드, 실행 시점 DOM 완성 후, 외부 스크립트 필수
+   <script async src="./test.js"></script>   백그라운드 다운로드, 실행 시점 다운로드 즉시, 외부 스크립트 필수
+   
+16) 동기/비동기
+   javascript는 싱글 쓰레드지만 이벤트 루프 덕분에 비동기 처리가 가능하다
+   
+- Promise
+   비동기 작업의 결과를 감싸는 객체
+   3가지 상태
+   - pending : 아직 완료되지 않은 상태
+   - fulfilled : 성공한 상태(resolve)
+   - rejected : 실패한 상태(reject)
+   에러처리 .catch()
+
+- async/await
+   동기 코드처럼 직관적
+   에러 처리 try/catch()
+
+- fetch
+   브라우저 내장 함수로 HTTP 요청을 보내고 Promise 반환
+
+   get요청
+   fetch("url")
+   .then(response => response.json())
+   .then(data => console.log(data))
+   .catch(error => console.error(error));
+
+   post요청
+   fetch("url", {
+      method:"post",
+      headers :{"Content-Type":"application/json"},
+      body:JSON.stringify({name:"홍길동"})
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+				
