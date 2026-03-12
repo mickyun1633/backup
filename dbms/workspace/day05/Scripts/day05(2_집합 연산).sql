@@ -92,3 +92,59 @@ WHERE L.CITY = 'Roma' AND E.SALARY >= 5000;
 
 
 
+
+
+
+SELELCT
+	지점,
+	 	SUM (
+	CASE WHEN SUBSTR(년월, 5, 2) =
+	'01' THEN 매출
+	ELSE 0
+END) AS "1월",
+	 	SUM (
+	CASE WHEN SUBSTR(년월, 5, 2) =
+	 '02' THEN 매출
+	ELSE 0
+END) AS "2월" +
+FROM
+매출_현황;
+GROUP BY 지점;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
